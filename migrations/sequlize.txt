@@ -1,0 +1,19 @@
+    /*await queryInterface.addConstraint('purchaserequest',{
+      fields:['drugcode'],
+      type:'foreign key',
+      name:'purchaserequest_drugcode_fkey',
+      references:{
+        table:'medicine',
+        field:'drugcode',
+      },
+      onDelete:'CASCADE',
+      onUpdate:'CASCADE',
+    })*/
+
+    // await queryInterface.removeConstraint('purchaserequest','purchaserequest_drugcode_fkey');
+
+
+    npx sequelize-cli migration:generate --name create-views y-view
+    npx sequelize-cli migration:generate --name migration-function-1
+
+  https://trulyremote.co/
