@@ -26,7 +26,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({express:true}));
 
 
-const port = 3000;
+const port = process.env.PORT || 5500;
 
 app.use(dbFuncRout);
 
@@ -162,7 +162,10 @@ BookLog.belongsTo(Sales, {
 //-------------------------------------------------------------
 
 
-sequelize.sync() // Ensures tables are created
+sequelize.sync({
+  force: true,
+  alter : true
+}) // Ensures tables are created
 .then(() => {
   app.listen(port);
   console.log('Database synchronized successfully');
