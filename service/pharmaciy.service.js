@@ -30,3 +30,64 @@ exports.listactivePharmacies = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+exports.selectActivepharmacy = async (req, res) => {
+    const { pharmacyname, branchname } = req.body;
+    if(!pharmacyname || !branchname){
+        res.json({message:'empty pharma name or brance name'});
+        return;
+    }
+    try {
+        const pharmacy = await Pharmaciy.findAll({
+            attributes: [
+                ['pharmacyname', 'pharmacyname'],
+                ['branchname', 'branchname'],
+                ['subcity', 'subcity'],
+                ['woreda', 'woreda'],
+                ['houseno', 'houseno'],
+                ['phonenumber', 'phonenumber'],
+                ['email', 'email']
+            ],
+            where: {
+                pharmacystatus: 'active',
+                pharmacyname: pharmacyname,
+                branchname: branchname
+            },
+            raw: true
+        });
+
+        res.json(pharmacy);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.selectCurrentpharmacy = async (req, res) => {
+    const { pharmacyname, branchname } = req.body;
+
+    try {
+        const pharmacy = await Pharmaciy.findAll({
+            attributes: [
+                ['pharmacyname', 'pharmacyname'],
+                ['branchname', 'branchname'],
+                ['subcity', 'subcity'],
+                ['woreda', 'woreda'],
+                ['houseno', 'houseno'],
+                ['phonenumber', 'phonenumber'],
+                ['email', 'email']
+            ],
+            where: {
+                pharmacystatus: 'active',
+                pharmacyname: pharmacyname,
+                branchname: branchname
+            },
+            raw: true
+        });
+
+        res.json(pharmacy);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Internal Server Error');
+    }
+};

@@ -1,5 +1,6 @@
 const Sales = require('../models/sales.js');
 const Medicine = require('../models/medicine.js');
+const BookLog = require('../models/booklog.js');
 const Sequelize = require('sequelize');
 
 
@@ -348,6 +349,410 @@ exports.listAllrevenueformonthyear = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+exports.listAllsalemonths = async (req, res) => {
+    try {
+        const salesMonths = await Sales.findAll({
+            attributes: [
+                [Sequelize.literal('EXTRACT(MONTH FROM "salesdate")'), 'salesmonth']
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    required: true,
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: {
+                salesstatus: 'sold'
+            }
+        });
+
+        res.json(salesMonths.map(month => month.dataValues));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+exports.listAllsales = async (req, res) => {
+    try {
+        const salesData = await Sales.findAll({
+            attributes: [
+                'salesid',
+                'drugcode',
+                [Sequelize.col('Medicine.genericname'), 'genericname'],
+                [Sequelize.col('Medicine.brandname'), 'brandname'],
+                [Sequelize.col('Medicine.dosage'), 'dosage'],
+                [Sequelize.col('Medicine.formulation'), 'formulation'],
+                'quantity',
+                [Sequelize.col('Medicine.unit'), 'unit'],
+                [Sequelize.col('Sales.unitsellingprice'), 'unitSellingPrice'],
+                [Sequelize.literal('"Sales"."quantity" *"Sales"."unitsellingprice"'), 'totalprice'],
+                'salesdate',
+                'dispensedby',
+                'salesstatus'
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    required: true,
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: {
+                salesstatus: 'sold'
+            },
+            order: [
+                ['salesstatus', 'DESC'],
+                ['salesdate', 'DESC']
+            ]
+        });
+
+        res.json(salesData.map(sale => sale.dataValues));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.listAllsalesforyearmonth = async (req, res) => {
+    const { month,year} = req.body; 
+
+    if(!month || !year){
+        res.json({message:'please fill both year and month'});
+        return;
+    }
+
+    try {
+        const salesData = await Sales.findAll({
+            attributes: [
+                'salesid',
+                'drugcode',
+                [Sequelize.col('Medicine.genericname'), 'genericname'],
+                [Sequelize.col('Medicine.brandname'), 'brandname'],
+                [Sequelize.col('Medicine.dosage'), 'dosage'],
+                [Sequelize.col('Medicine.formulation'), 'formulation'],
+                'quantity',
+                [Sequelize.col('Medicine.unit'), 'unit'],
+                [Sequelize.col('Sales.unitsellingprice'), 'unitSellingPrice'],
+                [Sequelize.literal('"Sales"."quantity" *"Sales"."unitsellingprice"'), 'totalprice'],
+                'salesdate',
+                'dispensedby',
+                'salesstatus'
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    required: true,
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: {
+                salesstatus: 'sold',
+                [Sequelize.Op.and]: [
+                    Sequelize.literal(`EXTRACT(YEAR FROM "salesdate") = ${year}`),
+                    Sequelize.literal(`EXTRACT(MONTH FROM "salesdate") = ${month}`),
+                ],
+            },
+            order: [
+                ['salesstatus', 'DESC'],
+                ['salesdate', 'DESC']
+            ]
+        });
+
+        res.json(salesData.map(sale => sale.dataValues));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.listAllsaleyears =async (req, res) => {
+    try {
+        const salesYears = await Sales.findAll({
+            attributes: [
+                [Sequelize.literal('EXTRACT(YEAR FROM "salesdate")::INT'), 'salesyear']
+            ],
+            include: [{
+                model: Medicine,
+                where: {
+                    drugstatus: 'active'
+                },
+                required: true // Ensures that only records with matching Medicine entries are included
+            }],
+            where: {
+                salesstatus: 'sold'
+            },
+            // group: [
+            //     Sequelize.literal('EXTRACT(YEAR FROM "salesdate")')
+            // ],
+        });
+
+        const salesYearsArray = salesYears.map(year => year.dataValues.salesyear);
+
+        res.json(salesYearsArray);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.listReturnedsales = async (req, res) => {
+    try {
+        const returnedSales = await Sales.findAll({
+            attributes: [
+                'salesid',
+                'drugcode',
+                [Sequelize.col('Medicine.genericname'), 'GenericName'],
+                [Sequelize.col('Medicine.brandname'), 'BrandName'],
+                [Sequelize.col('Medicine.dosage'), 'Dosage'],
+                [Sequelize.col('Medicine.formulation'), 'Formulation'],
+                'quantity',
+                [Sequelize.col('Medicine.unit'), 'Unit'],
+                'unitsellingprice',
+                [Sequelize.literal('"Sales"."quantity" *"Sales"."unitsellingprice"'), 'TPrice'],
+                'salesdate',
+                'dispensedby',
+                'salesstatus'
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: {
+                salesstatus: 'returned'
+            },
+            order: [
+                ['salesdate', 'DESC']
+            ],
+            raw: true
+        });
+
+        res.json(returnedSales);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.salesNotrecorded = async (req, res) => {
+    try {
+        const unrecordedSales = await Sales.findAll({
+            attributes: [
+                ['salesid', 'salesid'],
+                ['drugcode', 'drugcode'],
+                [Sequelize.col('Medicine.genericname'), 'genericname'],
+                [Sequelize.col('Medicine.brandname'), 'brandname'],
+                [Sequelize.col('Medicine.dosage'), 'dosage'],
+                [Sequelize.col('Medicine.formulation'), 'formulation'],
+                ['quantity', 'quantity'],
+                [Sequelize.col('Medicine.unit'), 'unit'],
+                ['unitsellingprice', 'unitsellingprice'],
+                [
+                    Sequelize.literal('"Sales"."quantity" * "Sales"."unitsellingprice"'),
+                    'totalprice'
+                ],
+                ['salesdate', 'salesdate'],
+                ['dispensedby', 'dispensedby'],
+                ['salesstatus', 'salesstatus']
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: {
+                salesstatus: 'sold',
+            },
+            raw: true
+        });
+        const recordinBookLog = await BookLog.findAll({
+            attributes: [
+                ['salesid', 'salesid'],
+                ['drugcode', 'drugcode'],
+            ],
+        })
+        const recordArray = [];
+        recordinBookLog.forEach(record => {
+            recordArray.push(record.dataValues);
+        })
+        const arrayResult = unrecordedSales.filter(itemOne =>
+            !recordArray.some(itemTwo => 
+                itemTwo.salesid === itemOne.salesid 
+            )
+        );
+        res.json(arrayResult);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+/**
+ * 
+ * @Important week is not defined in database
+ */
+exports.selectRevenueByWeek = async (req, res) => {
+    const { week, year } = req.body;
+
+    try {
+        const revenueByWeek = await Sales.findAll({
+            attributes: [
+                [
+                    Sequelize.literal('EXTRACT(ISODOW FROM "salesdate")::double precision'),
+                    'salesday'
+                ],
+                [Sequelize.fn('SUM', Sequelize.col('quantity')), 'totalsold'],
+                [
+                    Sequelize.literal('SUM("quantity" * "unitsellingprice")'),
+                    'totalrevenue'
+                ]
+            ],
+            where: Sequelize.and(
+                { salesstatus: 'sold' },
+                Sequelize.literal(`EXTRACT(YEAR FROM "salesdate") = ${year}`),
+                Sequelize.literal(`EXTRACT(WEEK FROM "salesdate") = ${week}`)
+            ),
+            group: [
+                Sequelize.literal('EXTRACT(ISODOW FROM "salesdate")')
+            ],
+            order: [
+                [Sequelize.literal('EXTRACT(ISODOW FROM "salesdate")'), 'ASC']
+            ],
+            raw: true
+        });
+
+        res.json(revenueByWeek);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+exports.selectMonthlySales = async (req, res) => {
+    const { year, month } = req.body;
+
+    try {
+        const monthlySales = await Sales.findAll({
+            attributes: [
+                ['drugcode', 'drugcode'],
+                [Sequelize.col('Medicine.genericname'), 'genericname'],
+                [Sequelize.col('Medicine.brandname'), 'brandname'],
+                [Sequelize.col('Medicine.dosage'), 'dosage'],
+                [Sequelize.col('Medicine.formulation'), 'formulation'],
+                [Sequelize.literal('SUM("Sales"."quantity")'), 'tquantity'],
+                [Sequelize.literal('SUM("Sales"."quantity" * "Sales"."unitsellingprice")'), 'tprice']
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: Sequelize.and(
+                { salesstatus: 'sold' },
+                Sequelize.literal(`EXTRACT(YEAR FROM "salesdate") = ${year}`),
+                Sequelize.literal(`EXTRACT(MONTH FROM "salesdate") = ${month}`)
+            ),
+            group: [
+                'Sales.drugcode',
+                'Medicine.genericname',
+                'Medicine.brandname',
+                'Medicine.dosage',
+                'Medicine.formulation'
+            ],
+            order: [
+                [Sequelize.literal('SUM("Sales"."quantity")'), 'DESC']
+            ],
+            raw: true
+        });
+
+        res.json(monthlySales);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.selectSoldbyweekcode =async (req, res) => {
+    const { week, year } = req.body;
+
+    try {
+        const soldByWeekCode = await Sales.findAll({
+            attributes: [
+                'Sales.drugcode',
+                [Sequelize.col('Medicine.genericname'), 'GenericName'],
+                [Sequelize.col('Medicine.brandname'), 'BrandName'],
+                [Sequelize.col('Medicine.dosage'), 'Dosage'],
+                [Sequelize.col('Medicine.formulation'), 'Formulation'],
+                [Sequelize.fn('SUM', Sequelize.col('Sales.quantity')), 'TQuantity'],
+                [
+                    Sequelize.fn(
+                        'SUM',
+                        Sequelize.literal('"Sales"."quantity" * "Sales"."unitsellingprice"')
+                    ),
+                    'TotalRevenue',
+                ],
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    where: {
+                        drugstatus: 'active',
+                    },
+                },
+            ],
+            where: Sequelize.and(
+                { salesstatus: 'sold' },
+                Sequelize.literal(`EXTRACT(YEAR FROM "salesdate") = ${year}`),
+                Sequelize.literal(`EXTRACT(WEEK FROM "salesdate") = ${week}`)
+            ),
+            group: [
+                'Sales.drugcode',
+                'Medicine.genericname',
+                'Medicine.brandname',
+                'Medicine.dosage',
+                'Medicine.formulation',
+            ],
+            order: [[Sequelize.fn('SUM', Sequelize.col('Sales.quantity')), 'DESC']],
+            raw: true,
+        });
+
+        res.json(soldByWeekCode);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
 
 
 

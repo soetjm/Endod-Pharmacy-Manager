@@ -1,5 +1,7 @@
 const UserRole = require('../models/userrole.js');
 const UserAccount = require('../models/useraccount.js');
+const Employee = require('../models/employee.js');
+const Sequelize = require('sequelize');
 const argon2 = require('argon2');
 
 
@@ -75,6 +77,90 @@ exports.canLogin = async (req, res) => {
         }
     } catch (error) {
         console.error('Error validating login:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.listUserroles = async (req, res) => {
+    try {
+        const userRoles = await UserRole.findAll({
+            attributes: [
+                ['username', 'username'],
+                ['role', 'role'],
+                ['rolestatus', 'rolestatus'],
+            ],
+            include: [
+                {
+                    model: UserAccount,
+                    attributes: [],
+                    where: {
+                        accountstatus: {
+                            [Sequelize.Op.ne]: 'deleted'
+                        }
+                    }
+                }
+            ],
+            order: [['role', 'ASC']],
+            raw: true
+        });
+
+        const userEmployee = await Employee.findAll({
+            attributes: [
+                ['username','username'],
+                [
+                Sequelize.literal(`"Employee"."firstname" || ' ' || "Employee"."lastname"`),
+                'fullname'
+               ]
+            ],
+        })
+        let employeArray = [];
+        userEmployee.forEach(element => {
+            employeArray.push(element.dataValues);
+        })
+        const arrayResult = userRoles.map(itemOne => ({
+            ...itemOne,
+            ...employeArray.find(itemTwo => itemTwo.username === itemOne.username)
+        }));
+        
+        res.json(arrayResult);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+exports.selectUserrole = async (req, res) => {
+    const { username } = req.body;
+
+    try {
+        const userRoles = await UserRole.findAll({
+            attributes: [
+                'username',
+                'role',
+                'rolestatus'
+            ],
+            include: [
+                {
+                    model: UserAccount,
+                    attributes: [],
+                    where: {
+                        accountstatus: {
+                            [Sequelize.Op.ne]: 'deleted'
+                        }
+                    }
+                }
+            ],
+            where: {
+                username
+            },
+            order: [['role', 'ASC']],
+            raw: true
+        });
+
+        res.json(userRoles);
+    } catch (error) {
+        console.log(error);
         res.status(500).send('Internal Server Error');
     }
 };

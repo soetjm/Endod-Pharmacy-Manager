@@ -1,5 +1,6 @@
 const Supplier = require('../models/supplier.js');
 
+
 exports.listActivesuppliers =async (req, res) => {
     try {
         const activeSuppliers = await Supplier.findAll({
@@ -28,3 +29,33 @@ exports.listActivesuppliers =async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+exports.selectActivesupplier = async (req, res) => {
+    const { suppliername } = req.body;
+    if(!suppliername){
+        res.json({message:'empity suppliername'});
+    }
+
+    try {
+        const supplier = await Supplier.findAll({
+            attributes: [
+                ['suppliername', 'suppliername'],
+                ['subcity', 'subcity'],
+                ['woreda', 'woreda'],
+                ['houseno', 'houseno'],
+                ['phonenumber', 'phonenumber'],
+                ['email', 'email']
+            ],
+            where: {
+                supplierstatus: 'active',
+                suppliername: suppliername
+            },
+            raw: true
+        });
+
+        res.json(supplier);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+}; 

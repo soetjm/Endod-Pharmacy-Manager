@@ -78,3 +78,90 @@ exports.listUnapproveddisposable = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+exports.listApproveddisposable = async (req, res) => {
+    try {
+        const disposableMedicines = await DisposableMedicine.findAll({
+            attributes: [
+                'did',
+                'drugcode',
+                'batchno',
+                [Sequelize.col('Medicine.genericname'), 'GenericName'],
+                [Sequelize.col('Medicine.brandname'), 'BrandName'],
+                [Sequelize.col('Medicine.dosage'), 'Dosage'],
+                [Sequelize.col('Medicine.formulation'), 'Formulation'],
+                [Sequelize.col('Medicine.unit'), 'Unit'],
+                'quantity',
+                'damagedfrom',
+                'damagedate',
+                'reportedby',
+                'remark'
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: {
+                damagestatus: 'approved'
+            },
+            order: [
+                ['damagedate', 'DESC'],
+                ['drugcode', 'ASC']
+            ],
+            raw: true
+        });
+
+        res.json(disposableMedicines);
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.listUnapproveddisposable = async (req, res) => {
+    try {
+        const unapprovedDisposables = await DisposableMedicine.findAll({
+            attributes: [
+                'did',
+                'drugcode',
+                'batchno',
+                [Sequelize.col('Medicine.genericname'), 'GenericName'],
+                [Sequelize.col('Medicine.brandname'), 'BrandName'],
+                [Sequelize.col('Medicine.dosage'), 'Dosage'],
+                [Sequelize.col('Medicine.formulation'), 'Formulation'],
+                [Sequelize.col('Medicine.unit'), 'Unit'],
+                'quantity',
+                'damagedfrom',
+                'damagedate',
+                'reportedby',
+                'remark'
+            ],
+            include: [
+                {
+                    model: Medicine,
+                    attributes: [],
+                    where: {
+                        drugstatus: 'active'
+                    }
+                }
+            ],
+            where: {
+                damagestatus: 'pending'
+            },
+            order: [
+                ['damagedate', 'DESC'],
+                ['drugcode', 'ASC']
+            ],
+            raw: true
+        });
+
+        res.json(unapprovedDisposables);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};

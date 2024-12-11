@@ -31,27 +31,27 @@ const port = 3000;
 app.use(dbFuncRout);
 
 // Define associations
-// Medicine.hasMany(Sales, {
-//   foreignKey: 'drugcode',
-//   sourceKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
-// Sales.belongsTo(Medicine, {
-//   foreignKey: 'drugcode',
-//   targetKey: 'drugcode',
-// });
-
-Sales.hasOne(BookLog, {
-  foreignKey: 'salesid',
-  sourceKey: 'salesid',
+Medicine.hasMany(Sales, {
+  foreignKey: 'drugcode',
+  sourceKey: 'drugcode',
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
 });
-BookLog.belongsTo(Sales, {
-  foreignKey: 'salesid',
-  targetKey: 'salesid',
+Sales.belongsTo(Medicine, {
+  foreignKey: 'drugcode',
+  targetKey: 'drugcode',
 });
+
+// Sales.hasOne(BookLog, {
+//   foreignKey: 'salesid',
+//   sourceKey: 'salesid',
+//   onDelete: 'CASCADE',
+//   onUpdate: 'CASCADE',
+// });
+// BookLog.belongsTo(Sales, {
+//   foreignKey: 'salesid',
+//   targetKey: 'salesid',
+// });
 
 // Sales.hasMany(BookLog, {
 //   foreignKey: 'drugcode',
@@ -65,101 +65,101 @@ BookLog.belongsTo(Sales, {
 // });
 
 //---------------------------------------------------------
-// Medicine.hasMany(PurchaseRequest, {
-//   foreignKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+Medicine.hasMany(PurchaseRequest, {
+  foreignKey: 'drugcode',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
-// PurchaseRequest.belongsTo(Medicine, {
-//   foreignKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+PurchaseRequest.belongsTo(Medicine, {
+  foreignKey: 'drugcode',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
-// //---------------------------------------------------------
+//---------------------------------------------------------
 
-// DisposableMedicine.belongsTo(Medicine, {
-//   foreignKey: 'drugcode', 
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+DisposableMedicine.belongsTo(Medicine, {
+  foreignKey: 'drugcode', 
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
 
-// Medicine.hasMany(DisposableMedicine, {
-//   foreignKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+Medicine.hasMany(DisposableMedicine, {
+  foreignKey: 'drugcode',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
 
 //-------------------------------------------------------------
 
-// Employee.belongsTo(UserAccount, {
-//   foreignKey: 'username',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
-// UserAccount.hasMany(Employee, {
-//   foreignKey: 'username',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+Employee.belongsTo(UserAccount, {
+  foreignKey: 'username',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+UserAccount.hasMany(Employee, {
+  foreignKey: 'username',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
-// //---------------------------------------------------------------
+//---------------------------------------------------------------
 
-// StockRequest.belongsTo(Medicine, {
-//   foreignKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
-// Medicine.hasMany(StockRequest, {
-//   foreignKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+StockRequest.belongsTo(Medicine, {
+  foreignKey: 'drugcode',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+Medicine.hasMany(StockRequest, {
+  foreignKey: 'drugcode',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
-// //----------------------------------------------------------------
+//----------------------------------------------------------------
 
-// TransferRequest.belongsTo(Medicine, {
-//   foreignKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
-// Medicine.hasMany(TransferRequest, {
-//   foreignKey: 'drugcode',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
-
-
-// //-----------------------------------------------------------
+TransferRequest.belongsTo(Medicine, {
+  foreignKey: 'drugcode',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+Medicine.hasMany(TransferRequest, {
+  foreignKey: 'drugcode',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
 
-// UserRole.belongsTo(UserAccount, {
-//   foreignKey: 'username',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
-// UserAccount.hasMany(UserRole, {
-//   foreignKey: 'username',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+//-----------------------------------------------------------
+
+
+UserRole.belongsTo(UserAccount, {
+  foreignKey: 'username',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+UserAccount.hasMany(UserRole, {
+  foreignKey: 'username',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
 //------------------------------------------------------------
-// UserLog.belongsTo(UserAccount, {
-//   foreignKey: 'username',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
-// UserAccount.hasMany(UserLog, {
-//   foreignKey: 'username',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE',
-// });
+UserLog.belongsTo(UserAccount, {
+  foreignKey: 'username',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+UserAccount.hasMany(UserLog, {
+  foreignKey: 'username',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 
 sequelize.sync() // Ensures tables are created

@@ -1,4 +1,5 @@
 const Medicine = require('../models/medicine.js');
+const Sequelize = require('sequelize');
 
 
 exports.addMedicen = async (req,res)=>{
@@ -198,6 +199,155 @@ exports.listUnapproveddisposable = async (req, res) => {
         }
     } catch (error) {
         console.error('Error fetching unapproved disposable medicines:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.searchBybrand = async (req, res) => {
+    const { brandname } = req.body;
+    if(!brandname){
+        res.json({message:'undedined brandname'});
+        return;
+    }
+    try {
+        const medicines = await Medicine.findAll({
+            attributes: [
+                ['drugcode', 'drugcode'],
+                ['genericname', 'genericname'],
+                ['brandname', 'brandname'],
+                ['dosage', 'dosage'],
+                ['formulation', 'formulation'],
+                ['classification', 'classification'],
+                ['unit', 'unit'],
+                ['unitsellingprice', 'unitsellingprice'],
+                ['sharestatus', 'sharestatus']
+            ],
+            where: {
+                drugstatus: 'active',
+                brandname: {
+                    [Sequelize.Op.iLike]: `%${brandname}%`  
+                }
+            },
+            raw: true
+        });
+
+        res.json(medicines);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.searchBydrugcode = async (req, res) => {
+    const { drugcode } = req.body;
+    if(!drugcode){
+        res.json({message:'undedined drugcode'});
+        return;
+    }
+    try {
+        const medicines = await Medicine.findAll({
+            attributes: [
+                ['drugcode', 'drugcode'],
+                ['genericname', 'genericname'],
+                ['brandname', 'brandname'],
+                ['dosage', 'dosage'],
+                ['formulation', 'formulation'],
+                ['classification', 'classification'],
+                ['unit', 'unit'],
+                ['unitsellingprice', 'unitsellingprice'],
+                ['sharestatus', 'sharestatus']
+            ],
+            where: {
+                drugstatus: 'active',
+                drugcode: {
+                    [Sequelize.Op.iLike]: `%${drugcode}%`  
+                }
+            },
+            raw: true
+        });
+
+        res.json(medicines);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.searchBygeneric = async (req, res) => {
+    const { genericname } = req.body;
+    if(!genericname){
+        res.json({message:'undedined genericname'});
+        return;
+    }
+    try {
+        const medicines = await Medicine.findAll({
+            attributes: [
+                ['drugcode', 'drugcode'],
+                ['genericname', 'genericname'],
+                ['brandname', 'brandname'],
+                ['dosage', 'dosage'],
+                ['formulation', 'formulation'],
+                ['classification', 'classification'],
+                ['unit', 'unit'],
+                ['unitsellingprice', 'unitsellingprice'],
+                ['sharestatus', 'sharestatus']
+            ],
+            where: {
+                drugstatus: 'active',
+                genericname: {
+                    [Sequelize.Op.iLike]: `%${genericname}%`  
+                }
+            },
+            raw: true
+        });
+
+        res.json(medicines);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+exports.selectMedicineDetails = async (req, res) => {
+    const { drugcode } = req.body;
+
+    try {
+        const medicineDetails = await Medicine.findAll({
+            attributes: [
+                ['drugcode', 'drugcode'],
+                ['genericname', 'genericname'],
+                ['brandname', 'brandname'],
+                ['dosage', 'dosage'],
+                ['formulation', 'formulation'],
+                ['classification', 'classification'],
+                ['unit', 'unit'],
+                ['unitsellingprice', 'unitsellingprice'],
+                ['sharestatus', 'sharestatus']
+            ],
+            where: {
+                drugstatus: 'active',
+                drugcode: drugcode
+            },
+            raw: true
+        });
+
+        res.json(medicineDetails);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+exports.viewStorestockcardbatch = async (req, res) => {
+    const { drugcode } = req.body;
+
+    try {
+
+
+        res.json(stockCardBatch);
+    } catch (error) {
+        console.log(error);
         res.status(500).send('Internal Server Error');
     }
 };
