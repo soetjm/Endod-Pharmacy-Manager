@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "postgres",
-    "password": "11141994so",
+    "password": "",
     "database": "Pharmaciy",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "11141994so",
+    "password": "",
     "database": "Pharmaciy",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
-    "password": "11141994so",
+    "password": "",
     "database": "Pharmaciy",
     "host": "127.0.0.1",
     "dialect": "postgres"
