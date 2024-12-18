@@ -10,7 +10,6 @@ const PurchaseRequest = sequelize.define('PurchaseRequest', {
     drugcode: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        primaryKey:true,
     },
     quantityrequested: {
         type: Sequelize.INTEGER,

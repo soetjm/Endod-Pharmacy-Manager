@@ -13,19 +13,18 @@ const BookLog = sequelize.define('booklog', {
     salesid: {
       type: Sequelize.BIGINT,
       allowNull: false,
-      reference:{
-        model:Sales,
-        key:'salesid'
-      }
-      
+      // reference:{
+      //   model:Sales,
+      //   key:'salesid'
+      // }
     },
     drugcode: {
       type: Sequelize.STRING(50),
       allowNull: false,
-      reference:{
-        model:Sales,
-        key:'drugcode'
-      }
+      // reference:{
+      //   model:Sales,
+      //   key:'drugcode'
+      // }
     },
     customerfname: {
       type: Sequelize.STRING(50),

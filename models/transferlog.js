@@ -35,6 +35,10 @@ const TransferLog = sequelize.define('TransferLog', {
     transferrequestno: {
         type: Sequelize.BIGINT,
         allowNull: false,
+        reference:{
+            model:'TransferRequest',
+            key:'transferrid'
+        }
     },
     purchaseinvoiceno: {
         type: Sequelize.STRING(50),

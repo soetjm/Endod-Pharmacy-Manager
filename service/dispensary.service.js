@@ -29,15 +29,13 @@ exports.countDispensedindrugs = async (req, res) => {
                 )
             ),
             group: ['drugcode'],
+            raw:true,
         });
 
-        const dispensedArray = [];
-        dispensedData.forEach((e) => {
-            dispensedArray.push(e.dataValues);
-        });
+  
 
         if (dispensedData.length > 0) {
-            console.log('Fetched dispensed drugs data successfully:', dispensedArray);
+            console.log('Fetched dispensed drugs data successfully:', dispensedData);
             res.json(dispensedData);
         } else {
             console.log('No dispensed drugs data found for the specified criteria.');
@@ -71,16 +69,13 @@ exports.countDispensedoutdrugs = async (req, res) => {
                 AND EXTRACT(YEAR FROM "issueddate") = ${year}
             `),
             group: ['drugcode'],
+            raw:true,
         });
 
-        const dispensedOutArray = [];
-        dispensedOutData.forEach((e) => {
-            dispensedOutArray.push(e.dataValues);
-        });
-
+ 
         if (dispensedOutData.length > 0) {
-            console.log('Fetched returned drugs data successfully:', dispensedOutArray);
-            res.json(dispensedOutArray);
+            console.log('Fetched returned drugs data successfully:', dispensedOutData);
+            res.json(dispensedOutData);
         } else {
             console.log('No returned drugs data found for the specified criteria.');
             res.json([]);

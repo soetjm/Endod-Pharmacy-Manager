@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require("../utils/dbconnection.js");
 const Medicine = require('./medicine.js');
+const BookLog = require('./booklog.js');
 
 const Sales = sequelize.define('Sales', {
     salesid: {
@@ -11,10 +12,6 @@ const Sales = sequelize.define('Sales', {
     drugcode: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        references:{
-            model:Medicine,
-            key:'drugcode'
-        }
     },
     quantity: {
         type: Sequelize.INTEGER,
@@ -48,6 +45,12 @@ const Sales = sequelize.define('Sales', {
     tableName: 'sales', 
     schema: 'public', 
     timestamps: false, 
+    indexes: [
+        {
+            unique: true,
+            fields: ['salesid', 'drugcode'], // Composite key
+        },
+    ],
 });
 
   

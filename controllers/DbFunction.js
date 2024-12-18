@@ -1,21 +1,4 @@
-// const { where } = require('sequelize');
-// const Employee = require('../models/employee.js');
-// const BookLog = require("../models/booklog.js");
-// const Dispensary = require("../models/dispensary.js");
 const DisposableMedicine =require('../models/disposablemedicine.js');
-// const Medicine = require('../models/medicine.js');
-// const Pharmaciy = require('../models/pharmacy.js');
-// const PurchaseLog = require('../models/purchaselog.js');
-// const PurchaseRequest = require('../models/purchaserequest.js');
-// const Sales = require('../models/sales.js');
-// const StockRequest = require('../models/stockrequest.js');
-// const Supplier = require('../models/supplier.js');
-// const TransferLog = require('../models/transferlog.js');
-// const TransferRequest = require('../models/transferrequest.js');
-// const UserAccount = require('../models/useraccount.js');
-// const UserLog = require('../models/userlog.js');
-// const UserRole = require('../models/userrole.js');
-
 const EmployeService = require('../service/employe.service.js');
 const MedicineService = require('../service/medicen.service.js');
 const UserRoleService = require('../service/userrole.service.js');
@@ -203,3 +186,53 @@ exports.selectTransferrequest = TransferRequestService.selectTransferrequest;
 exports.selectUserrole = UserRoleService.selectUserrole;
 
 exports.viewStorestockcardbatch = MedicineService.viewStorestockcardbatch;
+
+exports.listSharedAvailableDrugs = MedicineService.listSharedAvailableDrugs;
+
+exports.listMinMaxMedicineCost = MedicineService.listMinMaxMedicineCost;
+
+exports.getMinMaxMedicineCostByDrugCode = MedicineService.getMinMaxMedicineCostByDrugCode;
+
+exports.searchDispensaryStockByBrand = MedicineService.searchDispensaryStockByBrand;
+
+exports.searchDispensaryStockByCode = MedicineService.searchDispensaryStockByCode;
+
+exports.searchDispensaryStockByGeneric = MedicineService.searchDispensaryStockByGeneric;
+
+exports.searchStoreStockByBrand = MedicineService.searchStoreStockByBrand;
+
+exports.searchStoreStockByCode = MedicineService.searchStoreStockByCode;
+
+exports.searchStoreStockByGeneric = MedicineService.searchStoreStockByGeneric;
+
+exports.searchTransferableStockByBrand = MedicineService.searchTransferableStockByBrand;
+
+exports.searchTransferableStockByCode = MedicineService.searchTransferableStockByCode;
+
+exports.searchTransferableStockByGeneric = MedicineService.searchTransferableStockByGeneric;
+
+exports.selectAvailableDrug = MedicineService.selectAvailableDrug;
+
+exports.viewAllAvailableDrugs = MedicineService.viewAllAvailableDrugs;
+
+exports.viewAllPharmacyDrugs = MedicineService.viewAllPharmacyDrugs;
+
+exports.viewAllTockOutDrugs = MedicineService.viewAllTockOutDrugs;
+
+exports.viewDispensaryActiveBatches = MedicineService.viewDispensaryActiveBatches;
+
+exports.viewDispensaryActiveBatchesWithExpiry = MedicineService.viewDispensaryActiveBatchesWithExpiry;
+
+exports.viewDispensaryStock = MedicineService.viewDispensaryStock;
+
+exports.viewDispensaryStockCard = MedicineService.viewDispensaryStockCard;
+
+exports.viewInStore = MedicineService.viewInStore;
+
+exports.viewStoreStock = MedicineService.viewStoreStock;
+
+exports.viewStoreStockCard = MedicineService.viewStoreStockCard;
+
+exports.viewStoreStockCardBatch = MedicineService.viewStoreStockCardBatch;
+
+exports.viewStoreStockCardBatchByCode = MedicineService.viewStoreStockCardBatchByCode;

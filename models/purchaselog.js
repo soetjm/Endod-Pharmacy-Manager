@@ -34,6 +34,10 @@ const PurchaseLog = sequelize.define('PurchaseLog', {
     purchaserequestno: {
         type: Sequelize.BIGINT,
         allowNull: false,
+        reference:{
+            model:'PurchaseRequest',
+            key:'purchaserid'
+        }
     },
     purchaseinvoiceno: {
         type: Sequelize.STRING(50),

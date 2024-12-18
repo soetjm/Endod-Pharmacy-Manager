@@ -1,15 +1,20 @@
 const Sequelize = require('sequelize');
-const sequelize = require("../utils/dbconnection.js")
+const sequelize = require("../utils/dbconnection.js");
+const StockRequest = require('./stockrequest.js');
 
 const Dispensary = sequelize.define('Dispensary', {
     dispid: {
         type: Sequelize.BIGINT,
         allowNull: false,
-        primaryKey: true, // Assuming this is the primary key.
+        primaryKey: true, // A
     },
     drugcode: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        // reference:{
+        //     model:'StockRequest',
+        //     key:'drugcode'
+        // }
     },
     batchno: {
         type: Sequelize.STRING(50),
@@ -38,6 +43,11 @@ const Dispensary = sequelize.define('Dispensary', {
     stockrequestno: {
         type: Sequelize.BIGINT,
         allowNull: false,
+        reference:{
+            model:'StockRequest',
+            key:'stockrid'
+        }
+
     },
     batchstatus: {
         type: Sequelize.STRING(20),
@@ -67,9 +77,8 @@ const Dispensary = sequelize.define('Dispensary', {
         type: Sequelize.TEXT,
     },
 }, {
-    tableName: 'dispensary', // Match the table name in the database
-    schema: 'public', // Specify the schema
-    timestamps: false, // Assuming no createdAt or updatedAt columns
-});
+    tableName: 'dispensary', 
+    schema: 'public',
+    timestamps: false,});
 
 module.exports = Dispensary;

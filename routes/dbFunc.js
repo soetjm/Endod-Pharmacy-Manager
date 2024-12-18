@@ -173,6 +173,56 @@ router.get('/selectUserrole',Dbfunction.selectUserrole);
 
 router.get('/viewStorestockcardbatch',Dbfunction.viewStorestockcardbatch);
 
+router.get('/listSharedAvailableDrugs',Dbfunction.listSharedAvailableDrugs);
+
+router.get('/listMinMaxMedicineCost',Dbfunction.listMinMaxMedicineCost);
+
+router.get('/getMinMaxMedicineCostByDrugCode/:drugcode',Dbfunction.getMinMaxMedicineCostByDrugCode);
+
+router.get('/searchDispensaryStockByBrand/:brandname',Dbfunction.searchDispensaryStockByBrand);
+
+router.get('/searchDispensaryStockByCode/:drugcode',Dbfunction.searchDispensaryStockByCode);
+
+router.get('/searchDispensaryStockByGeneric/:genericname',Dbfunction.searchDispensaryStockByGeneric);
+
+router.get('/searchStoreStockByBrand/:brandname',Dbfunction.searchStoreStockByBrand);
+
+router.get('/searchStoreStockByCode/:drugcode',Dbfunction.searchStoreStockByCode)
+
+router.get('/searchStoreStockByGeneric/:genericname',Dbfunction.searchStoreStockByGeneric);
+
+router.get('/searchTransferableStockByBrand/:brandname',Dbfunction.searchTransferableStockByBrand);
+
+router.get('/searchTransferableStockByCode/:drugcode',Dbfunction.searchTransferableStockByCode);
+
+router.get('/searchTransferableStockByGeneric/:genericname',Dbfunction.searchTransferableStockByGeneric);
+
+router.get('/selectAvailableDrug/:drugcode',Dbfunction.selectAvailableDrug);
+
+router.get('/viewAllAvailableDrugs',Dbfunction.viewAllAvailableDrugs);
+
+router.get('/viewAllPharmacyDrugs',Dbfunction.viewAllPharmacyDrugs);
+
+router.get('/viewAllTockOutDrugs',Dbfunction.viewAllTockOutDrugs);
+
+router.get('/viewDispensaryActiveBatches/:drugcode',Dbfunction.viewDispensaryActiveBatches);
+
+router.get('/viewDispensaryActiveBatchesWithExpiry/:drugcode',Dbfunction.viewDispensaryActiveBatchesWithExpiry)
+
+router.get('/viewDispensaryStock',Dbfunction.viewDispensaryStock);
+
+router.get('/viewDispensaryStockCard',Dbfunction.viewDispensaryStockCard);
+
+router.get('/viewInStore',Dbfunction.viewInStore);
+
+router.get('/viewStoreStock',Dbfunction.viewStoreStock);
+
+router.get('/viewStoreStockCard',Dbfunction.viewStoreStockCard);
+
+router.get('/viewStoreStockCardBatch',Dbfunction.viewStoreStockCardBatch);
+
+router.get('/viewStoreStockCardBatchByCode/:drugCode',Dbfunction.viewStoreStockCardBatchByCode);
+
 module.exports = router;
 
 

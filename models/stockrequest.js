@@ -1,16 +1,20 @@
 const Sequelize = require('sequelize');
 const sequelize = require("../utils/dbconnection.js");
+const Dispensary = require('./dispensary.js');
 
 const StockRequest = sequelize.define('StockRequest', {
     stockrid: {
         type: Sequelize.BIGINT,
         allowNull: false,
-        primaryKey: true, // Assuming 'stockrid' is the primary key
+        primaryKey: true,
     },
     drugcode: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        primaryKey:true,
+        // reference:{
+        //     model:'Dispensary',
+        //     key:'drugcode'
+        // }
     },
     quantityrequested: {
         type: Sequelize.INTEGER,

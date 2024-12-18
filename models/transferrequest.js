@@ -11,7 +11,7 @@ const TransferRequest = sequelize.define('TransferRequest', {
     drugcode: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        primaryKey:true,
+        // primaryKey:true,
     },
     quantityrequested: {
         type: Sequelize.INTEGER,
@@ -47,7 +47,7 @@ const TransferRequest = sequelize.define('TransferRequest', {
     purchasedate: {
         type: Sequelize.DATEONLY,
         allowNull: false,
-        primaryKey:true,
+        // primaryKey:true,
     },
     requestedby: {
         type: Sequelize.STRING(105),
